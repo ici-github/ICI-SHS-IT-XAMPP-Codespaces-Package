@@ -1,71 +1,120 @@
 # 🚨 Codespace Startup Troubleshooting
 
-If you encountered the error "The workbench failed to connect to the server", here are the fixes that have been applied:
+If you encountered startup errors, here are the major fixes that have been applied:
 
-## ✅ Issues Fixed
+## 🔧 Latest Fixes Applied (v2)
 
-1. **JSON Comments Removed**: Removed all comments from `devcontainer.json` (JSON doesn't support comments)
-2. **Simplified Extensions**: Reduced VS Code extensions to avoid potential conflicts
-3. **User Permissions**: Changed to `root` user to avoid permission issues
-4. **Docker Volumes**: Simplified volume mounting with read-only flags
-5. **MySQL Health Checks**: Added proper health checks for service dependencies
-6. **Setup Script**: Improved error handling and timeout management
-7. **Apache Configuration**: Simplified Apache config for better compatibility
+### Major Issues Resolved:
+1. **Dockerfile Build Failure**: Removed complex heredoc syntax that was causing container build failures
+2. **Script Creation**: Moved setup script to separate file instead of inline creation
+3. **Simplified Dependencies**: Removed unnecessary packages that could cause conflicts
+4. **Container Permissions**: Streamlined permission handling
+5. **Volume Mounting**: Removed read-only flags that could cause issues
+6. **Reduced Extensions**: Minimized VS Code extensions to core PHP development tools
 
-## 🔄 How to Test the Fix
+### ✅ Current Configuration:
+- **Dockerfile**: Simplified with external script file
+- **Setup Script**: Separate `setup-xampp.sh` file with proper error handling
+- **Docker Compose**: Simplified volume and dependency management
+- **devcontainer.json**: Minimal configuration with essential features only
 
-1. **Delete the old Codespace** (if it exists):
-   - Go to your repository on GitHub
-   - Click "Code" → "Codespaces"
-   - Delete any existing Codespace
+## � Testing the Latest Fix
 
-2. **Create a new Codespace**:
-   - Click "Code" → "Codespaces" → "Create codespace on main"
-   - Wait 3-5 minutes for complete setup
+1. **Delete any existing Codespace** completely:
+   ```
+   GitHub → Your Repository → Code → Codespaces → Delete existing codespace
+   ```
 
-3. **Verify Services**:
-   - Check that all ports are forwarded (80, 443, 3306, 8080)
-   - Visit `http://localhost/welcome.html`
-   - Test `http://localhost:8080` for phpMyAdmin
+2. **Create fresh Codespace**:
+   ```
+   GitHub → Your Repository → Code → Codespaces → Create codespace on main
+   ```
 
-## 🛠️ If Issues Persist
+3. **Wait for complete setup** (3-5 minutes):
+   - Watch the terminal for build progress
+   - All services should start automatically
 
-### Check Container Logs
+4. **Verify functionality**:
+   - Check ports tab for forwarded ports (80, 443, 3306, 8080)
+   - Access `http://localhost/welcome.html`
+   - Test `http://localhost:8080` (phpMyAdmin)
+
+## � If Build Still Fails
+
+### Check Build Logs:
 ```bash
-# In the Codespace terminal
+# View Docker build output
+docker-compose logs --follow
+
+# Check specific service logs
 docker-compose logs web
 docker-compose logs mysql
 docker-compose logs phpmyadmin
 ```
 
-### Manual Service Restart
+### Manual Container Rebuild:
 ```bash
-# If services aren't running
-docker-compose down
+# Force rebuild containers
+docker-compose down --volumes
+docker-compose build --no-cache
 docker-compose up -d
 ```
 
-### Check Service Status
+### Check Container Status:
 ```bash
-# Check if all containers are running
+# See all containers
 docker-compose ps
+
+# Check if containers are healthy
+docker-compose exec web php --version
+docker-compose exec mysql mysql --version
 ```
 
-## 📋 Expected Behavior
+## 📋 Expected Working State
 
 After successful startup, you should see:
-- ✅ Apache running on port 80/443
-- ✅ MySQL running on port 3306
-- ✅ phpMyAdmin accessible on port 8080
-- ✅ All sample files accessible
+
+### ✅ Services Running:
+- **Apache/PHP**: Port 80 (HTTP), 443 (HTTPS)
+- **MySQL**: Port 3306
+- **phpMyAdmin**: Port 8080
+
+### ✅ Files Available:
+- `welcome.html` - Environment overview
+- `index.php` - PHP information
+- `sample-app.php` - Demo application
+- `test-db.php` - Database connection test
+
+### ✅ Database Access:
+- **Root**: `root` / `xampp`
+- **Student**: `student` / `student123`
 
 ## 🆘 Still Having Issues?
 
-1. Try creating the Codespace again
-2. Check GitHub Codespaces status page
-3. Ensure you have sufficient Codespace hours
-4. Contact your instructor with error details
+### Quick Diagnostic:
+```bash
+# Check if Docker is working
+docker --version
+
+# Check available resources
+df -h
+free -h
+
+# Check network connectivity
+ping mysql
+```
+
+### Common Solutions:
+1. **Try Different Browser**: Sometimes port forwarding has browser issues
+2. **Clear Browser Cache**: Codespaces sometimes cache old configurations
+3. **Wait Longer**: MySQL can take 2-3 minutes to fully initialize
+4. **Check GitHub Status**: Visit https://status.github.com for service issues
+
+### Contact Information:
+- Create issue in repository with full error logs
+- Include screenshots of error messages
+- Mention your GitHub username and Codespace creation time
 
 ---
 
-**Note**: The initial setup can take 3-5 minutes. Please be patient during the first launch!
+**Latest Update**: Simplified all configurations for maximum compatibility with GitHub Codespaces infrastructure.
