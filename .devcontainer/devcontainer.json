@@ -1,0 +1,62 @@
+{
+  "name": "XAMPP-like Environment (PHP 8.1+, MySQL 8.0+, phpMyAdmin)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/var/www/html",
+  
+  // Features to install
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  
+  // VS Code extensions to install
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-json",
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "ms-vscode.hexeditor",
+        "formulahendry.auto-rename-tag",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.live-server"
+      ]
+    }
+  },
+  
+  // Port forwarding for web services
+  "forwardPorts": [80, 443, 3306, 8080],
+  "portsAttributes": {
+    "80": {
+      "label": "Apache Web Server (HTTP)",
+      "onAutoForward": "notify"
+    },
+    "443": {
+      "label": "Apache Web Server (HTTPS)",
+      "onAutoForward": "notify"
+    },
+    "3306": {
+      "label": "MySQL Database",
+      "onAutoForward": "silent"
+    },
+    "8080": {
+      "label": "phpMyAdmin",
+      "onAutoForward": "notify"
+    }
+  },
+  
+  // Commands to run after container creation
+  "postCreateCommand": "bash /usr/local/bin/setup-xampp.sh",
+  
+  // Keep container running
+  "shutdownAction": "none",
+  
+  // Mount the workspace
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/var/www/html,type=bind,consistency=cached"
+  ],
+  
+  // Container user
+  "remoteUser": "www-data"
+}

@@ -1,139 +1,200 @@
-# ICI IT Codespace PHP/MySQL/phpMyAdmin
+# 🚀 XAMPP-like Environment for GitHub Codespaces
 
-This project sets up a development environment using GitHub Codespaces with MySQL, phpMyAdmin, and Apache for students in Iligan Computer Institute. Students are required to follow all the notes and guidelines here.
+This project provides a complete XAMPP-like development environment using GitHub Codespaces with **PHP 8.2+**, **MySQL 8.0+**, **Apache**, and **phpMyAdmin** for students at Iligan Computer Institute. All services start automatically!
 
-## Students should use their ICI-email supplied email address to use the privileges in the Codespace.
-- Free Accounts: 120 hours
-- Verified Student/Teacher (applied to GitHub Student Developer Pack): 180 hours
-- resets every activation per month
+## 🎓 For Students
 
-### GitHub Codespaces and GitHub Student Developer Pack
-1. To use GitHUB Codespaces, make sure you already registered your ICI-email address to GitHub.
-2. Visit https://education.github.com/pack to activate, follow the instructions from GitHub.
-3. Allow location tracking from browser prompt as this is needed for GitHub Admins to activate your account.
-4. Verification process is automatic but GitHub Education team needs evidence that you are an officially enrolled student of Iligan Computer Institute.
-5. (optional) To send your Student ID as part of the verification, follow this instructions, take pictures on both front and back then edit them to be as one picture and attach it to the submission form.
-6. (optional) To send your COR / Certificate of Registration as evidence for verification, take a photo of your COR then upload it to the submission form.
-7. Depends on the selected document for verification, expect an email coming from GitHub Education Team with the message, "Welcome to Github Global Campus", that indicates that your Student Developer Pack has been activated an able to use GitHub Codespaces at no charge.
+### GitHub Codespaces Usage Limits
+- **Free Accounts**: 120 hours per month
+- **GitHub Student Developer Pack**: 180 hours per month (recommended)
+- Usage resets monthly
 
-## Starting the server just in case in won't start automatically 
-1. Go to Terminal
-2. Type the following command: `sudo service apache2 start`
+### 📝 Getting GitHub Student Developer Pack
+1. Register your ICI email address with GitHub
+2. Visit https://education.github.com/pack to apply
+3. Enable location tracking when prompted (required for verification)
+4. Upload student verification documents:
+   - Student ID (front and back combined into one image)
+   - Certificate of Registration (COR)
+5. Wait for approval email: "Welcome to GitHub Global Campus"
 
-## Database Credentials
+## 🔧 What's Included
 
-The following credentials are used to connect to the MySQL database:
+This environment provides:
+- **PHP 8.2+** with all common extensions
+- **MySQL 8.0+** database server
+- **Apache 2.4+** web server with SSL support
+- **phpMyAdmin** for database management
+- **Composer** for PHP package management
+- **Node.js 18+** and npm for modern web development
+- **All services auto-start** when Codespace launches
 
-- **Host**: `localhost`
-- **User**: `mariadb`
-- **Password**: `mariadb`
-- **Database**: `mariadb`
+## 🚀 Quick Start
 
-## Sample PHP MySQL Connection
+1. **Fork this repository** to your GitHub account
+2. **Open in Codespaces**:
+   - Click the green `Code` button
+   - Select `Codespaces` tab
+   - Click `Create codespace on main`
+3. **Wait for setup** (2-3 minutes) - all services start automatically
+4. **Start coding!** Your environment is ready
 
-Create a file named `index.php` in the `htdocs` directory with the following content to test the database connection:
+## 🌐 Access Points
 
-## PHP MySQL Connection
+Once your Codespace is running, you can access:
 
-Here is a sample PHP script to connect to the MySQL database:
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Welcome Page** | `http://localhost/welcome.html` | Environment overview |
+| **PHP Info** | `http://localhost/index.php` | PHP configuration |
+| **Sample App** | `http://localhost/sample-app.php` | Demo CRUD application |
+| **Database Test** | `http://localhost/test-db.php` | MySQL connection test |
+| **phpMyAdmin** | `http://localhost:8080` | Database management |
 
+## 🔐 Database Credentials
+
+### Default MySQL Credentials
+```
+Host: mysql (or localhost)
+Port: 3306
+Root User: root
+Root Password: xampp
+Database: xampp
+```
+
+### Student Account (Limited Privileges)
+```
+Username: student
+Password: student123
+Databases: student_projects, xampp (limited access)
+```
+
+## 📁 File Structure
+
+```
+/var/www/html/          # Your web files go here (auto-mapped to workspace)
+├── welcome.html        # Environment welcome page
+├── index.php          # PHP info page
+├── sample-app.php     # Demo application
+├── test-db.php        # Database connection test
+└── [your files]       # Add your PHP projects here
+```
+
+## 💻 Development Workflow
+
+### Adding Your Code
+1. Create PHP files directly in the workspace root
+2. Files are automatically available at `http://localhost/yourfile.php`
+3. Use the included sample files as templates
+
+### Database Management
+1. **phpMyAdmin**: Access at `http://localhost:8080`
+2. **Command Line**: Use the integrated terminal
+3. **Sample Data**: Pre-loaded with example tables
+
+### Sample PHP Connection
 ```php
 <?php
-$servername = "localhost";
-$username = "mariadb";
-$password = "mariadb";
-$dbname = "mariadb";
+$host = 'mysql';  // Use 'mysql' in Codespaces, 'localhost' locally
+$username = 'root';
+$password = 'xampp';
+$database = 'xampp';
 
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connected successfully!";
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
 }
-echo "Connected successfully";
 ?>
 ```
 
-## Setup
+## 🛠️ Troubleshooting
 
-1. **Duplicate this GitHub repository**:
-    - Click on the `Use this template` button at the top right of the repository page then select `Create a new repository` to create a copy of this repository in your GitHub account.
-2. **Open the duplicated repository in GitHub Codespaces**:
-    - Click on the `Code` button and select `Open with Codespaces`.
-    - Select `New codespace` to create a new Codespace.
-  
-## How to Run the Server
+### Services Not Starting
+If services don't start automatically:
+```bash
+# Check service status
+docker-compose ps
 
-1. **Start PHP/Apache Server**:
-    - The PHP/Apache server should start automatically when the Codespace is created.
+# Restart services
+docker-compose restart
 
-## How to Run the Database
+# View logs
+docker-compose logs
+```
 
-1. **Start MySQL Server**:
-    - The MySQL server should start automatically when the Codespace is created.
+### Database Connection Issues
+1. Ensure you're using `mysql` as hostname (not `localhost`)
+2. Check credentials match the ones above
+3. Verify MySQL container is running: `docker-compose ps`
 
-## How to Access phpMyAdmin
+### File Permission Issues
+```bash
+# Fix permissions if needed
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+```
 
-1. **Open phpMyAdmin**:
-    - In your Codespace, add `/phpmyadmin` to the URL.
-    - Open the forwarded port for phpMyAdmin to access the interface.
+## ✅ Do's and Don'ts
 
-## Do's and Don'ts
+### ✅ Do's
+- Upload your work to the workspace root directory
+- Use phpMyAdmin for visual database management
+- Test your code using the provided sample files
+- Use the integrated VS Code terminal for commands
+- Collaborate using VS Code Live Share
 
-### Do's
+### ❌ Don'ts
+- Don't modify `.devcontainer/` files unless necessary
+- Don't store sensitive data in public repositories
+- Don't share your Codespace URL publicly
+- Don't manually start/stop services (they auto-start)
 
-- **Do** upload your work to the `htdocs` directory.
-- **Do** use phpMyAdmin for database management.
-- **Do** collaborate using Live Share for real-time coding sessions.
-- **Do** follow the instructions for exporting the database.
+## 🔄 Pre-configured Features
 
-### Don'ts
+### Auto-starting Services
+All services start automatically when the Codespace launches:
+- Apache web server (ports 80, 443)
+- MySQL database server (port 3306)
+- phpMyAdmin (port 8080)
 
-- **Don't** modify or delete configuration files unless you know what you're doing.
-- **Don't** store sensitive information in the repository.
-- **Don't** share your Codespace URL publicly.
-- **Don't** delete files outside the `htdocs` directory.
-- **Don't** delete the `htdocs` directory itself.
+### VS Code Extensions
+Pre-installed extensions for PHP development:
+- PHP Intelephense (autocompletion)
+- PHP Debug (Xdebug support)
+- Auto Rename Tag
+- Tailwind CSS support
 
-## Usage
+### Sample Data
+The MySQL database includes:
+- `xampp` database with sample tables
+- `student_projects` database for your projects
+- Sample user data for testing
 
-- **Upload Work**: Students should upload their work to the `htdocs` directory.
-- **Access phpMyAdmin**: Navigate to the `Ports` tab in this codespace and open the forwarded port for phpMyAdmin.
-- **Run the sample PHP script**: The `htdocs/index.php` file demonstrates a database connection.
+## 🆘 Getting Help
 
-### Export Database
+1. **Check the welcome page**: `http://localhost/welcome.html`
+2. **Review sample files**: Use the provided templates
+3. **Check VS Code problems panel**: View any errors
+4. **Use the integrated terminal**: Run diagnostic commands
+5. **Contact your instructor**: For course-specific help
 
-To export the database, run the "Export Database" task:
+## 🔧 Advanced Configuration
 
-1. Open the Command Palette in VS Code (Ctrl+Shift+P or Cmd+Shift+P).
-2. Type "Tasks: Run Task" and select it.
-3. Choose "Export Database" from the list of tasks.
+### Adding PHP Extensions
+Edit `.devcontainer/Dockerfile` to add more PHP extensions:
+```dockerfile
+RUN docker-php-ext-install extension_name
+```
 
-### Next Steps
+### Custom Apache Configuration
+Modify `.devcontainer/apache/apache2.conf` for Apache settings.
 
-1. **Add Your Code**: Start adding your PHP code to the `htdocs` directory.
-2. **Collaborate**: Use Live Share to collaborate with your team in real-time.
-3. **Test and Debug**: Use the integrated terminal and debugging tools in VS Code to test and debug your application.
-4. **Deploy**: Once your application is ready, consider deploying it to a production environment.
+### Custom PHP Settings
+Edit `.devcontainer/php/php.ini` for PHP configuration.
 
-### Troubleshooting
+---
 
-- **Codespace Not Starting**: Ensure you have the necessary permissions and resources to create a Codespace.
-- **Database Connection Issues**: Check the MySQL server status and ensure your credentials are correct.
-- **Permission Errors**: Ensure the `htdocs` directory has the correct permissions set.
-
-
-### Explanation
-
-- **Setup**: Updated instructions for students to duplicate the repository and create their own Codespaces.
-- **Database Credentials**: Lists the database credentials for easy reference.
-- **Sample PHP MySQL Connection**: Provides a sample PHP script to test the database connection.
-- **Do's and Don'ts**: Provides guidelines for using the environment effectively, including not deleting files outside the [htdocs](http://_vscodecontentref_/0) directory.
-- **Usage**: Instructions on how to upload work, access phpMyAdmin, and run the sample PHP script.
-- **Export Database**: Steps to export the database using the "Export Database" task.
-- **Next Steps**: Suggests actions to take after setting up the environment.
-- **Troubleshooting**: Offers solutions for common issues.
-- **Support**: Provides information on how to get help.
-
-This improved [`README.md`](README.md ) should provide clear instructions and guidelines for students to set up and use the development environment effectively.
+**Ready to start coding?** Create your Codespace and begin building amazing web applications! 🎉
