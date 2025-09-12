@@ -116,7 +116,7 @@ $database = 'xampp';
             <a href="welcome.html">← Back to Welcome</a> |
             <a href="index.php">PHP Info</a> |
             <a href="sample-app.php">Sample App</a> |
-            <a href="http://localhost:8080" target="_blank">phpMyAdmin</a>
+            <a href="/phpmyadmin" target="_blank">phpMyAdmin</a>
         </div>
         
         <h1>🗄️ Database Connection Test</h1>

@@ -40,7 +40,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Enable Apache modules
-RUN a2enmod rewrite ssl headers expires
+RUN a2enmod rewrite ssl headers expires proxy proxy_http
 
 # Install Node.js and npm
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \

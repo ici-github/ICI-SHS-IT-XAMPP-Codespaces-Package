@@ -19,23 +19,19 @@
     }
   },
   
-  "forwardPorts": [80, 443, 3306, 8080],
+  "forwardPorts": [80, 443, 3306],
   "portsAttributes": {
     "80": {
-      "label": "Apache Web Server (HTTP)",
+      "label": "Apache Web Server (HTTP) - includes /phpmyadmin",
       "onAutoForward": "notify"
     },
     "443": {
-      "label": "Apache Web Server (HTTPS)", 
+      "label": "Apache Web Server (HTTPS) - includes /phpmyadmin", 
       "onAutoForward": "notify"
     },
     "3306": {
       "label": "MySQL Database",
       "onAutoForward": "silent"
-    },
-    "8080": {
-      "label": "phpMyAdmin",
-      "onAutoForward": "notify"
     }
   },
   

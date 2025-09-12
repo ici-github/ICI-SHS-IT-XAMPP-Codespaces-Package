@@ -49,8 +49,6 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:5.2
-    ports:
-      - "8080:80"
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
@@ -59,6 +57,7 @@ services:
       MYSQL_ROOT_PASSWORD: xampp
       PMA_ARBITRARY: 1
       UPLOAD_LIMIT: 64M
+      PMA_ABSOLUTE_URI: http://localhost/phpmyadmin/
     depends_on:
       mysql:
         condition: service_healthy

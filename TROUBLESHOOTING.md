@@ -35,9 +35,9 @@ If you encountered startup errors, here are the major fixes that have been appli
    - All services should start automatically
 
 4. **Verify functionality**:
-   - Check ports tab for forwarded ports (80, 443, 3306, 8080)
+   - Check ports tab for forwarded ports (80, 443, 3306)
    - Access `http://localhost/welcome.html`
-   - Test `http://localhost:8080` (phpMyAdmin)
+   - Test `http://localhost/phpmyadmin` (phpMyAdmin)
 
 ## � If Build Still Fails
 
@@ -77,7 +77,7 @@ After successful startup, you should see:
 ### ✅ Services Running:
 - **Apache/PHP**: Port 80 (HTTP), 443 (HTTPS)
 - **MySQL**: Port 3306
-- **phpMyAdmin**: Port 8080
+- **phpMyAdmin**: Accessible at `/phpmyadmin`
 
 ### ✅ Files Available:
 - `welcome.html` - Environment overview
