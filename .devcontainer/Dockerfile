@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     nano \
     htop \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -50,25 +51,59 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
 
 # Create setup script
-COPY <<EOF /usr/local/bin/setup-xampp.sh
+RUN cat > /usr/local/bin/setup-xampp.sh << 'EOF'
 #!/bin/bash
+set -e
 
-# Start Apache in background
-apache2ctl start
+echo "Starting XAMPP-like environment setup..."
 
 # Wait for MySQL to be ready
 echo "Waiting for MySQL to be ready..."
-while ! mysqladmin ping -h mysql -u root -pxampp --silent; do
-    sleep 1
+timeout=60
+while ! mysqladmin ping -h mysql -u root -pxampp --silent 2>/dev/null; do
+    sleep 2
+    timeout=$((timeout - 2))
+    if [ $timeout -le 0 ]; then
+        echo "MySQL connection timeout. Continuing anyway..."
+        break
+    fi
 done
 
-echo "MySQL is ready!"
+if mysqladmin ping -h mysql -u root -pxampp --silent 2>/dev/null; then
+    echo "MySQL is ready!"
+else
+    echo "MySQL not accessible, but continuing setup..."
+fi
 
 # Create a sample index.php file if it doesn't exist
 if [ ! -f /var/www/html/index.php ]; then
     cat > /var/www/html/index.php << 'PHPEOF'
 <?php
+// PHP Information Page
+echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Information - XAMPP-like Environment</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f7fa; }
+        .nav { text-align: center; margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .nav a { color: #667eea; text-decoration: none; margin: 0 15px; font-weight: 500; }
+        .nav a:hover { text-decoration: underline; }
+        .info-container { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="welcome.html">← Back to Welcome</a> |
+        <a href="sample-app.php">Sample App</a> |
+        <a href="test-db.php">Database Test</a> |
+        <a href="http://localhost:8080" target="_blank">phpMyAdmin</a>
+    </div>
+    <div class="info-container">';
 phpinfo();
+echo '</div></body></html>';
 ?>
 PHPEOF
 fi
@@ -77,106 +112,44 @@ fi
 if [ ! -f /var/www/html/test-db.php ]; then
     cat > /var/www/html/test-db.php << 'PHPEOF'
 <?php
-\$host = 'mysql';
-\$username = 'root';
-\$password = 'xampp';
-\$database = 'xampp';
+$host = 'mysql';
+$username = 'root';
+$password = 'xampp';
+$database = 'xampp';
 
 try {
-    \$pdo = new PDO("mysql:host=\$host;dbname=\$database", \$username, \$password);
-    \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "<h2>Database Connection Successful!</h2>";
-    echo "<p>Connected to MySQL database: \$database</p>";
+    echo "<p>Connected to MySQL database: $database</p>";
     
     // Show current databases
-    \$stmt = \$pdo->query('SHOW DATABASES');
+    $stmt = $pdo->query('SHOW DATABASES');
     echo "<h3>Available Databases:</h3><ul>";
-    while (\$row = \$stmt->fetch()) {
-        echo "<li>" . \$row[0] . "</li>";
+    while ($row = $stmt->fetch()) {
+        echo "<li>" . $row[0] . "</li>";
     }
     echo "</ul>";
     
-} catch(PDOException \$e) {
+} catch(PDOException $e) {
     echo "<h2>Connection failed:</h2>";
-    echo "<p>" . \$e->getMessage() . "</p>";
+    echo "<p>" . $e->getMessage() . "</p>";
 }
 ?>
 PHPEOF
 fi
 
-# Create a welcome page
-if [ ! -f /var/www/html/welcome.html ]; then
-    cat > /var/www/html/welcome.html << 'HTMLEOF'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XAMPP-like Environment - GitHub Codespaces</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f4f4; }
-        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; border-bottom: 3px solid #007acc; padding-bottom: 10px; }
-        .service { margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #007acc; }
-        .status { color: #28a745; font-weight: bold; }
-        a { color: #007acc; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🚀 XAMPP-like Environment for GitHub Codespaces</h1>
-        
-        <div class="service">
-            <h3>📊 PHP Information</h3>
-            <p><span class="status">✅ Active</span> - <a href="index.php" target="_blank">View PHP Info</a></p>
-        </div>
-        
-        <div class="service">
-            <h3>🗄️ Database Connection Test</h3>
-            <p><span class="status">✅ Active</span> - <a href="test-db.php" target="_blank">Test MySQL Connection</a></p>
-        </div>
-        
-        <div class="service">
-            <h3>🔧 phpMyAdmin</h3>
-            <p><span class="status">✅ Active</span> - <a href="http://localhost:8080" target="_blank">Access phpMyAdmin</a></p>
-            <p><strong>Login:</strong> root / xampp</p>
-        </div>
-        
-        <div class="service">
-            <h3>📚 Development Info</h3>
-            <ul>
-                <li><strong>PHP Version:</strong> 8.2+</li>
-                <li><strong>MySQL Version:</strong> 8.0+</li>
-                <li><strong>Apache Ports:</strong> 80 (HTTP), 443 (HTTPS)</li>
-                <li><strong>MySQL Port:</strong> 3306</li>
-                <li><strong>phpMyAdmin Port:</strong> 8080</li>
-            </ul>
-        </div>
-        
-        <div class="service">
-            <h3>🎓 For Students</h3>
-            <p>This environment provides a complete XAMPP-like setup that works anywhere with GitHub Codespaces!</p>
-            <ul>
-                <li>All services start automatically</li>
-                <li>Full PHP development environment</li>
-                <li>MySQL database with phpMyAdmin</li>
-                <li>Apache web server with SSL support</li>
-            </ul>
-        </div>
-    </div>
-</body>
-</html>
-HTMLEOF
-fi
+# Set proper permissions
+chown -R www-data:www-data /var/www/html 2>/dev/null || true
+chmod -R 755 /var/www/html 2>/dev/null || true
 
 echo "XAMPP-like environment setup completed!"
-echo "Services running:"
+echo "Services available:"
 echo "- Apache: http://localhost:80"
 echo "- phpMyAdmin: http://localhost:8080"
 echo "- MySQL: localhost:3306"
 
-# Keep Apache running in foreground
+# Start Apache in foreground (this is the main process)
 exec apache2-foreground
 EOF
 

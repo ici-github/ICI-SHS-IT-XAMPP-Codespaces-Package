@@ -10,11 +10,12 @@ services:
       - "443:443"
     volumes:
       - ../:/var/www/html
-      - ./apache/apache2.conf:/etc/apache2/apache2.conf
-      - ./apache/sites-available:/etc/apache2/sites-available
-      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./apache/apache2.conf:/etc/apache2/apache2.conf:ro
+      - ./apache/sites-available/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
+      - ./php/php.ini:/usr/local/etc/php/php.ini:ro
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html
       - MYSQL_HOST=mysql
@@ -23,11 +24,10 @@ services:
       - MYSQL_DATABASE=xampp
     networks:
       - xampp-network
-    restart: unless-stopped
 
   mysql:
     image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0
     ports:
       - "3306:3306"
     environment:
@@ -37,13 +37,18 @@ services:
       MYSQL_PASSWORD: xampp
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/init:/docker-entrypoint-initdb.d:ro
     networks:
       - xampp-network
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pxampp"]
+      timeout: 20s
+      retries: 10
+      start_period: 40s
+      interval: 10s
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin:5.2
     ports:
       - "8080:80"
     environment:
@@ -53,14 +58,16 @@ services:
       PMA_PASSWORD: xampp
       MYSQL_ROOT_PASSWORD: xampp
       PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 64M
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - xampp-network
-    restart: unless-stopped
 
 volumes:
   mysql_data:
+    driver: local
 
 networks:
   xampp-network:
