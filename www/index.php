@@ -2,7 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, ini        <div class="info">
+            <h3>📝 Sample PHP Code</h3>
+            <div class="code">
+&lt;?php
+// Connect to database using MySQLi
+$conn = mysqli_connect("mysql", "root", "root", "basic_db");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Simple query
+$result = mysqli_query($conn, "SELECT * FROM users");
+$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+foreach ($users as $user) {
+    echo $user['name'] . " - " . $user['email'] . "&lt;br&gt;";
+}
+
+// Close connection
+mysqli_close($conn);
+?&gt;
+            </div>
+        </div>
     <title>Basic PHP & MySQL Environment</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
@@ -99,10 +123,11 @@
             <p><strong>PHP Version:</strong> <?= phpversion() ?></p>
             <p><strong>Server:</strong> <?= $_SERVER['SERVER_SOFTWARE'] ?? 'Apache' ?></p>
             <?php
-            try {
-                $pdo = new PDO("mysql:host=mysql;dbname=basic_db", "root", "root");
+            $conn = mysqli_connect("mysql", "root", "root", "basic_db");
+            if ($conn) {
                 echo "<p><strong>Database:</strong> ✅ Connected to MySQL</p>";
-            } catch(PDOException $e) {
+                mysqli_close($conn);
+            } else {
                 echo "<p><strong>Database:</strong> ⏳ Starting up...</p>";
             }
             ?>
@@ -148,7 +173,7 @@ foreach ($users as $user) {
             <h3>� What You Can Learn</h3>
             <ul>
                 <li>Basic PHP syntax and programming</li>
-                <li>Database connections with PDO</li>
+                <li>Database connections with MySQLi</li>
                 <li>Simple CRUD operations</li>
                 <li>HTML and PHP integration</li>
                 <li>Basic web development workflow</li>

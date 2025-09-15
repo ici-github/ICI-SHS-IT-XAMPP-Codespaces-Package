@@ -106,17 +106,21 @@
         echo '<div class="result">';
         echo '<h3>🗄️ MySQL Connection Test</h3>';
         
-        try {
-            $pdo = new PDO("mysql:host=mysql;dbname=basic_db", "root", "root");
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
+        $conn = mysqli_connect("mysql", "root", "root", "basic_db");
+        
+        if (!$conn) {
+            echo '<div class="error">';
+            echo '<h4>❌ Connection Failed!</h4>';
+            echo '<p>Error: ' . mysqli_connect_error() . '</p>';
+            echo '</div>';
+        } else {
             echo '<div class="success">';
             echo '<h4>✅ Connection Successful!</h4>';
             echo '<p>Successfully connected to MySQL database.</p>';
             
             // Get MySQL version
-            $stmt = $pdo->query("SELECT VERSION() as version");
-            $version = $stmt->fetch(PDO::FETCH_ASSOC);
+            $result = mysqli_query($conn, "SELECT VERSION() as version");
+            $version = mysqli_fetch_assoc($result);
             echo '<p><strong>MySQL Version:</strong> ' . $version['version'] . '</p>';
             
             // Test basic operations
@@ -124,19 +128,20 @@
             echo '<table>';
             
             // Show current database
-            $stmt = $pdo->query("SELECT DATABASE() as current_db");
-            $current_db = $stmt->fetch(PDO::FETCH_ASSOC);
+            $result = mysqli_query($conn, "SELECT DATABASE() as current_db");
+            $current_db = mysqli_fetch_assoc($result);
             echo '<tr><td>Current Database</td><td>' . $current_db['current_db'] . '</td></tr>';
             
             // Count users
-            $stmt = $pdo->query("SELECT COUNT(*) as count FROM users");
-            $userCount = $stmt->fetchColumn();
+            $result = mysqli_query($conn, "SELECT COUNT(*) as count FROM users");
+            $count_row = mysqli_fetch_assoc($result);
+            $userCount = $count_row['count'];
             echo '<tr><td>Users in Database</td><td>' . $userCount . ' users</td></tr>';
             
             // Show sample users
             if ($userCount > 0) {
-                $stmt = $pdo->query("SELECT name, email FROM users LIMIT 3");
-                $sampleUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $result = mysqli_query($conn, "SELECT name, email FROM users LIMIT 3");
+                $sampleUsers = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 $userList = [];
                 foreach ($sampleUsers as $user) {
                     $userList[] = $user['name'] . ' (' . $user['email'] . ')';
@@ -147,12 +152,8 @@
             echo '</table>';
             echo '</div>';
             
-        } catch(PDOException $e) {
-            echo '<div class="error">';
-            echo '<h4>❌ Connection Failed</h4>';
-            echo '<p><strong>Error:</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
-            echo '<p>MySQL might still be starting up. Please wait a moment and refresh.</p>';
-            echo '</div>';
+            // Close connection
+            mysqli_close($conn);
         }
         echo '</div>';
         ?>
@@ -161,14 +162,17 @@
             <h3>💻 Sample Connection Code</h3>
             <div class="code">
 &lt;?php
-// Basic database connection
-try {
-    $pdo = new PDO("mysql:host=mysql;dbname=basic_db", "root", "root");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully!";
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+// Basic database connection using MySQLi
+$conn = mysqli_connect("mysql", "root", "root", "basic_db");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
+echo "Connected successfully!";
+
+// Close connection
+mysqli_close($conn);
 ?&gt;
             </div>
         </div>

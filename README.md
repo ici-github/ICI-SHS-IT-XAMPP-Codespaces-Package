@@ -27,7 +27,7 @@ Students should use their **ICI-email supplied email address** to use the privil
 ## ✨ What's Included
 
 ### 🛠️ Essential Components
-- **PHP 8.1** with essential extensions (PDO, MySQLi)
+- **PHP 8.1** with essential extensions (MySQLi)
 - **MySQL 8.0** with sample database
 - **Apache 2.4** web server
 - **phpMyAdmin** integrated at `/phpmyadmin` path
@@ -97,14 +97,8 @@ if (!$conn) {
 }
 echo "Connected successfully!";
 
-// Or using PDO (recommended)
-try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully with PDO!";
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
+// Close connection when done
+mysqli_close($conn);
 ?>
 ```
 
@@ -129,35 +123,41 @@ Your environment comes with:
 ### 1. Basic Database Connection
 ```php
 <?php
-try {
-    $pdo = new PDO("mysql:host=mysql;dbname=basic_db", "root", "root");
-    echo "Connected to database!";
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+$conn = mysqli_connect("mysql", "root", "root", "basic_db");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
+echo "Connected to database!";
+mysqli_close($conn);
 ?>
 ```
 
 ### 2. Simple Query
 ```php
 <?php
-$pdo = new PDO("mysql:host=mysql;dbname=basic_db", "root", "root");
-$stmt = $pdo->query("SELECT * FROM users");
-$users = $stmt->fetchAll();
+$conn = mysqli_connect("mysql", "root", "root", "basic_db");
+$result = mysqli_query($conn, "SELECT * FROM users");
+$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 foreach ($users as $user) {
     echo $user['name'] . " - " . $user['email'] . "<br>";
 }
+mysqli_close($conn);
 ?>
 ```
 
 ### 3. Insert Data
 ```php
 <?php
-$pdo = new PDO("mysql:host=mysql;dbname=basic_db", "root", "root");
-$stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
-$stmt->execute(['John Doe', 'john@example.com']);
+$conn = mysqli_connect("mysql", "root", "root", "basic_db");
+$stmt = mysqli_prepare($conn, "INSERT INTO users (name, email) VALUES (?, ?)");
+mysqli_stmt_bind_param($stmt, "ss", "John Doe", "john@example.com");
+mysqli_stmt_execute($stmt);
 echo "User added!";
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
 ?>
 ```
 
@@ -171,7 +171,7 @@ echo "User added!";
 - File inclusion
 
 ### Database Fundamentals
-- Connecting to MySQL
+- Connecting to MySQL with MySQLi
 - SELECT, INSERT, UPDATE, DELETE operations
 - Prepared statements for security
 - Basic database design

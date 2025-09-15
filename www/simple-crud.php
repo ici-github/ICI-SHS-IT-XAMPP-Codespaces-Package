@@ -4,11 +4,11 @@
  */
 
 // Database connection
-try {
-    $pdo = new PDO("mysql:host=mysql;dbname=basic_db", "root", "root");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+$conn = mysqli_connect("mysql", "root", "root", "basic_db");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 
 // Handle form submissions
@@ -17,23 +17,27 @@ if ($_POST) {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'add':
-                $stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
-                $stmt->execute([$_POST['name'], $_POST['email']]);
+                $stmt = mysqli_prepare($conn, "INSERT INTO users (name, email) VALUES (?, ?)");
+                mysqli_stmt_bind_param($stmt, "ss", $_POST['name'], $_POST['email']);
+                mysqli_stmt_execute($stmt);
                 $message = "✅ User added successfully!";
+                mysqli_stmt_close($stmt);
                 break;
                 
             case 'delete':
-                $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
-                $stmt->execute([$_POST['id']]);
+                $stmt = mysqli_prepare($conn, "DELETE FROM users WHERE id = ?");
+                mysqli_stmt_bind_param($stmt, "i", $_POST['id']);
+                mysqli_stmt_execute($stmt);
                 $message = "✅ User deleted successfully!";
+                mysqli_stmt_close($stmt);
                 break;
         }
     }
 }
 
 // Get all users
-$stmt = $pdo->query("SELECT * FROM users ORDER BY id");
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = mysqli_query($conn, "SELECT * FROM users ORDER BY id");
+$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -227,3 +231,8 @@ $stmt->execute([$id]);') ?></code></pre>
     </div>
 </body>
 </html>
+
+<?php
+// Close database connection
+mysqli_close($conn);
+?>
