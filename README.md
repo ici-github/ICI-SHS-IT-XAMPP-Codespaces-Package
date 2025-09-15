@@ -21,7 +21,7 @@ Students should use their **ICI-email supplied email address** to use the privil
 3. **Allow location tracking** from browser prompt (needed for GitHub verification)
 4. **Verification is automatic** - GitHub needs evidence you're an enrolled ICI student
 5. **Optional**: Upload your Student ID (front and back as one image)
-6. **Optional**: Upload your COR (Certificate of Registration) as verification
+6. **Optional**: Upload your COR (Certificate of Registration) as verification showing the school logo.
 7. **Wait for approval** - expect email "Welcome to GitHub Global Campus"
 
 ## ✨ What's Included
