@@ -1,7 +1,7 @@
 <?php
 /**
  * phpMyAdmin configuration for GitHub Codespaces
- * This configuration allows phpMyAdmin to work properly with Codespaces' dynamic subdomain system
+ * Integrated into main Apache server at /phpmyadmin path
  */
 
 // Servers configuration
@@ -50,7 +50,9 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
     $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
 }
 
-// Set the correct PMA_ABSOLUTE_URI for Codespaces
-if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'githubpreview.dev') !== false) {
-    $cfg['PmaAbsoluteUri'] = 'https://' . $_SERVER['HTTP_HOST'] . '/';
-}
+// Set the correct PMA_ABSOLUTE_URI for Codespaces - using /phpmyadmin path
+$cfg['PmaAbsoluteUri'] = '/phpmyadmin/';
+
+// Fix asset paths for integrated setup
+$cfg['ThemeDefault'] = 'pmahomme';
+$cfg['StylesheetPath'] = './themes/pmahomme/css/theme.css';

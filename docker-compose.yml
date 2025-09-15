@@ -8,6 +8,7 @@ services:
       - "80:80"
     volumes:
       - ./www:/var/www/html
+      - ./config/phpmyadmin:/var/www/html/phpmyadmin
     depends_on:
       - mysql
     networks:
@@ -16,9 +17,13 @@ services:
     entrypoint: >
       sh -c "
       apt-get update &&
-      apt-get install -y libmariadb-dev &&
+      apt-get install -y libmariadb-dev wget unzip &&
       docker-php-ext-install pdo_mysql mysqli &&
-      rm -rf /var/lib/apt/lists/* &&
+      wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip -O /tmp/phpmyadmin.zip &&
+      unzip /tmp/phpmyadmin.zip -d /tmp/ &&
+      cp -r /tmp/phpMyAdmin-5.2.1-all-languages/* /var/www/html/phpmyadmin/ &&
+      cp /var/www/html/phpmyadmin/config.inc.php /var/www/html/phpmyadmin/config.inc.php.backup &&
+      rm -rf /var/lib/apt/lists/* /tmp/* &&
       exec apache2-foreground
       "
 
@@ -35,26 +40,6 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
-    networks:
-      - basic-network
-    restart: unless-stopped
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: basic-phpmyadmin
-    ports:
-      - "8080:80"
-    volumes:
-      - ./config/phpmyadmin/config.inc.php:/etc/phpmyadmin/config.inc.php
-    environment:
-      PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: root
-      PMA_ABSOLUTE_URI: /
-      PMA_PORT: 3306
-      HIDE_PHP_VERSION: true
-    depends_on:
-      - mysql
     networks:
       - basic-network
     restart: unless-stopped
