@@ -27,11 +27,18 @@ A simple, focused **PHP 8.1+** and **MySQL 8.0+** development environment design
 
 ### 2. Access Your Environment
 
-| Service | Port | What It Does |
-|---------|------|--------------|
-| **Your Website** | 80 | Your PHP applications |
-| **phpMyAdmin** | 8080 | Database management interface |
-| **MySQL** | 3306 | Direct database connections |
+**In GitHub Codespaces, services are automatically forwarded with unique URLs:**
+
+| Service | Port | How to Access |
+|---------|------|---------------|
+| **Your Website** | 80 | Click the "Open in Browser" button when port 80 is forwarded |
+| **phpMyAdmin** | 8080 | Click the "Open in Browser" button when port 8080 is forwarded |
+| **MySQL** | 3306 | Use `mysql` as hostname in your PHP code (auto-forwarded) |
+
+**📌 Important for Codespaces:**
+- Don't use `localhost:8080` - use the forwarded URL provided by Codespaces
+- Look for notification popups saying "Your application is available on port X"
+- You can also access forwarded ports via the "Ports" tab in VS Code
 
 ## 📋 Database Setup
 
@@ -181,8 +188,22 @@ docker-compose exec mysql mysql -u root -p
 - Check credentials: `root/root` or `student/student`
 
 ### phpMyAdmin Not Working?
-- Access it directly via port 8080 forwarding
-- Wait for all services to start completely
+✅ **Fixed for Codespaces!** phpMyAdmin now includes proper configuration for GitHub Codespaces' subdomain system.
+
+**How to Access phpMyAdmin:**
+1. Wait for all services to start (2-3 minutes)
+2. Look for the "Port 8080" notification in VS Code
+3. Click "Open in Browser" when the port 8080 notification appears
+4. Or check the "Ports" tab and click the globe icon next to port 8080
+
+**Login Credentials:**
+- Username: `root`
+- Password: `root`
+
+**Still having issues?**
+- Make sure you're using the Codespaces forwarded URL, not `localhost:8080`
+- Wait for MySQL to be fully ready before accessing phpMyAdmin
+- Check that all containers are running: View → Terminal → New Terminal → `docker-compose ps`
 
 ## � Next Steps
 
