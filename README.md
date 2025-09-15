@@ -21,12 +21,11 @@ This project provides a complete XAMPP-like development environment using GitHub
 ## 🔧 What's Included
 
 This environment provides:
-- **PHP 8.2+** with all common extensions
+- **PHP 8.2+** with essential extensions (PDO, MySQLi, mbstring, GD, ZIP)
 - **MySQL 8.0+** database server
 - **Apache 2.4+** web server with SSL support
 - **phpMyAdmin** for database management
 - **Composer** for PHP package management
-- **Node.js 18+** and npm for modern web development
 - **All services auto-start** when Codespace launches
 
 ## 🚀 Quick Start
