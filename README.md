@@ -48,7 +48,7 @@ Once your Codespace is running, you can access:
 | **PHP Info** | `http://localhost/index.php` | PHP configuration |
 | **Sample App** | `http://localhost/sample-app.php` | Demo CRUD application |
 | **Database Test** | `http://localhost/test-db.php` | MySQL connection test |
-| **phpMyAdmin** | `http://localhost/phpmyadmin` | Database management |
+| **phpMyAdmin** | `http://localhost:8080` | Database management |
 
 ## 🔐 Database Credentials
 
@@ -87,7 +87,7 @@ Databases: student_projects, xampp (limited access)
 3. Use the included sample files as templates
 
 ### Database Management
-1. **phpMyAdmin**: Access at `http://localhost/phpmyadmin`
+1. **phpMyAdmin**: Access at `http://localhost:8080`
 2. **Command Line**: Use the integrated terminal
 3. **Sample Data**: Pre-loaded with example tables
 
@@ -157,7 +157,7 @@ sudo chmod -R 755 /var/www/html
 All services start automatically when the Codespace launches:
 - Apache web server (ports 80, 443)
 - MySQL database server (port 3306)
-- phpMyAdmin (accessible at `/phpmyadmin`)
+- phpMyAdmin (port 8080)
 
 ### VS Code Extensions
 Pre-installed extensions for PHP development:

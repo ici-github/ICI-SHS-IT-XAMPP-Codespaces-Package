@@ -46,7 +46,7 @@ echo '<!DOCTYPE html>
         <a href="welcome.html">← Back to Welcome</a> |
         <a href="sample-app.php">Sample App</a> |
         <a href="test-db.php">Database Test</a> |
-        <a href="/phpmyadmin" target="_blank">phpMyAdmin</a>
+        <a href="http://localhost:8080" target="_blank">phpMyAdmin</a>
     </div>
     <div class="info-container">';
 

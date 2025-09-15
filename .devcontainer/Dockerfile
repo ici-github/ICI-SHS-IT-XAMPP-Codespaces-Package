@@ -30,7 +30,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Enable Apache modules
-RUN a2enmod rewrite ssl headers expires proxy proxy_http
+RUN a2enmod rewrite ssl headers expires
 
 # Copy setup script
 COPY setup-xampp.sh /usr/local/bin/setup-xampp.sh

@@ -28,7 +28,7 @@ chmod -R 755 /var/www/html 2>/dev/null || true
 echo "XAMPP-like environment setup completed!"
 echo "Services available:"
 echo "- Apache: http://localhost:80"
-echo "- phpMyAdmin: http://localhost/phpmyadmin"
+echo "- phpMyAdmin: http://localhost:8080"
 echo "- MySQL: localhost:3306"
 
 # Start Apache in foreground
