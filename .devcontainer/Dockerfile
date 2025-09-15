@@ -45,8 +45,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set the ServerName directive globally to suppress the warning
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
+# Copy startup script to container
+COPY setup-xampp.sh /usr/local/bin/setup-xampp.sh
+RUN chmod +x /usr/local/bin/setup-xampp.sh
+
+# Create a default htdocs directory structure
+RUN mkdir -p /tmp/htdocs-template
+
 # Expose port 80
 EXPOSE 80
 
 # Keep the container running by starting the startup script
-CMD ["/bin/bash", "-c", "/workspaces/${localWorkspaceFolderBasename}/startup.sh"]
+CMD ["/usr/local/bin/setup-xampp.sh"]

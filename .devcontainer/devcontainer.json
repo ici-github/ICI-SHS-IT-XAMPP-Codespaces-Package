@@ -28,6 +28,8 @@
     }
   },
   
+  "postCreateCommand": "echo 'Codespace created successfully!'",
+  
   "shutdownAction": "none",
   "remoteUser": "root"
 }
