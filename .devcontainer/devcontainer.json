@@ -2,14 +2,14 @@
   "name": "Basic PHP & MySQL Environment",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "php-apache",
-  "workspaceFolder": "/var/www/html",
+  "workspaceFolder": "/app",
   "shutdownAction": "stopCompose",
   
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": false,
       "upgradePackages": true,
-      "username": "vscode"
+      "username": "application"
     }
   },
 
@@ -42,8 +42,8 @@
     }
   },
 
-  "postCreateCommand": "bash /var/www/html/scripts/setup.sh",
-  "postStartCommand": "bash /var/www/html/scripts/start-services.sh",
+  "postCreateCommand": "bash /app/scripts/setup.sh",
+  "postStartCommand": "bash /app/scripts/start-services.sh",
 
-  "remoteUser": "vscode"
+  "remoteUser": "application"
 }

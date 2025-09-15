@@ -3,11 +3,11 @@
 echo "🚀 Setting up Basic PHP & MySQL environment..."
 
 # Create necessary directories
-mkdir -p /var/www/html/logs
+mkdir -p /app/logs
 
-# Set proper permissions
-sudo chown -R vscode:www-data /var/www/html
-sudo chmod -R 755 /var/www/html
+# Set proper permissions (webdevops image uses 'application' user)
+sudo chown -R application:application /app
+sudo chmod -R 755 /app
 
 echo "✅ Basic setup completed!"
 echo "🌐 Your PHP & MySQL environment is ready!"

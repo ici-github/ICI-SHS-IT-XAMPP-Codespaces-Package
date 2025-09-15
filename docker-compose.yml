@@ -2,18 +2,19 @@ version: '3.8'
 
 services:
   php-apache:
-    build: .
+    image: webdevops/php-apache:8.1
     container_name: basic-php-apache
     ports:
       - "80:80"
     volumes:
-      - ./www:/var/www/html
-      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./www:/app
     depends_on:
       - mysql
     networks:
       - basic-network
     restart: unless-stopped
+    environment:
+      - WEB_DOCUMENT_ROOT=/app
 
   mysql:
     image: mysql:8.0
