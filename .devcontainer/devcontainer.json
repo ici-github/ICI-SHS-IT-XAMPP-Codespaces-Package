@@ -2,14 +2,14 @@
   "name": "Basic PHP & MySQL Environment",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "php-apache",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/var/www/html",
   "shutdownAction": "stopCompose",
   
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": false,
       "upgradePackages": false,
-      "username": "application"
+      "username": "vscode"
     }
   },
 
@@ -42,5 +42,5 @@
     }
   },
 
-  "remoteUser": "application"
+  "remoteUser": "vscode"
 }

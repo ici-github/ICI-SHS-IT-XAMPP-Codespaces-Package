@@ -2,19 +2,25 @@ version: '3.8'
 
 services:
   php-apache:
-    image: webdevops/php-apache:8.1
+    image: php:8.1-apache
     container_name: basic-php-apache
     ports:
       - "80:80"
     volumes:
-      - ./www:/app
+      - ./www:/var/www/html
     depends_on:
       - mysql
     networks:
       - basic-network
     restart: unless-stopped
-    environment:
-      - WEB_DOCUMENT_ROOT=/app
+    entrypoint: >
+      sh -c "
+      apt-get update &&
+      apt-get install -y libmariadb-dev &&
+      docker-php-ext-install pdo_mysql mysqli &&
+      rm -rf /var/lib/apt/lists/* &&
+      exec apache2-foreground
+      "
 
   mysql:
     image: mysql:8.0
