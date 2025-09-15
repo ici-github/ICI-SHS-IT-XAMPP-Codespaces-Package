@@ -188,6 +188,65 @@ mysqli_close($conn);
 2. **View your work** through port 80 forwarding (see PORTS tab)
 3. **Manage database** with phpMyAdmin at `/phpmyadmin`
 4. **Test connections** with the built-in test page
+5. **Save your work** using Git (see Git workflow below)
+
+## 💾 How to Save Your Work (Git Commit & Push)
+
+### 📝 Using VS Code Source Control Interface
+
+**Step-by-step guide to commit and push your changes:**
+
+1. **🔍 Open Source Control Panel**
+   - **Click the Source Control icon** in the left sidebar (looks like a branch)
+   - **Or use keyboard shortcut**: `Ctrl+Shift+G` (Windows) or `Cmd+Shift+G` (Mac)
+
+2. **📋 Review Your Changes**
+   - **See modified files** under "CHANGES" section
+   - **View what you changed** by clicking on file names
+   - **Green lines** = added code, **Red lines** = deleted code
+
+3. **💬 Write a Commit Message**
+   - **Click in the message box** at the top (says "Message (Ctrl+Enter to commit on 'main')")
+   - **Type a clear description** of what you changed
+   - **Examples**: 
+     - `"Add user registration form"`
+     - `"Fix database connection bug"`
+     - `"Complete assignment 1 - CRUD operations"`
+
+4. **✅ Commit Your Changes**
+   - **Click the "Commit" button** (checkmark icon)
+   - **Or press `Ctrl+Enter`** (Windows) or `Cmd+Enter` (Mac)
+   - Your changes are now saved locally
+
+5. **🚀 Push to GitHub**
+   - **Click "Sync Changes"** button (appears after commit)
+   - **Or click the cloud upload icon** next to the branch name
+   - Your code is now backed up on GitHub!
+
+### 🎯 Quick Commit Workflow
+```
+Write Code → Save Files → Source Control → Add Message → Commit → Push
+```
+
+### 📌 Important Notes for ICI Students
+
+**✅ **Best Practices for Commit Messages:**
+- ✅ **Be descriptive**: "Add login functionality" not "update"
+- ✅ **Use present tense**: "Fix bug" not "Fixed bug"  
+- ✅ **Keep it short**: Under 50 characters when possible
+- ✅ **Include assignment info**: "Assignment 2: User management system"
+
+**⚠️ **When to Commit:**
+- ✅ **After completing a feature** (like a working contact form)
+- ✅ **Before trying something risky** (backup before experimenting)
+- ✅ **At the end of each coding session** (daily backup)
+- ✅ **When assignment is complete** (final submission)
+
+**📁 **What Gets Saved:**
+- ✅ **All your PHP files** in the www directory
+- ✅ **Database structure** (if you export it to a .sql file)
+- ✅ **Configuration changes** you made
+- ❌ **Database data** (unless exported to .sql file)
 
 ## 📝 Usage Guidelines for ICI Students
 
