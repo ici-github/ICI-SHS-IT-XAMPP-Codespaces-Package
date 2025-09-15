@@ -51,7 +51,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 }
 
 // Set the correct PMA_ABSOLUTE_URI for Codespaces - using /phpmyadmin path
-$cfg['PmaAbsoluteUri'] = '/phpmyadmin/';
+$cfg['PmaAbsoluteUri'] = '/phpmyadmin';
 
 // Fix asset paths for integrated setup
 $cfg['ThemeDefault'] = 'pmahomme';
