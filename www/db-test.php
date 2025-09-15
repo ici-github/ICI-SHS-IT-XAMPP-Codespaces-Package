@@ -107,10 +107,10 @@
         echo '<h3>🗄️ MySQL Connection Test</h3>';
         
         $conn = mysqli_connect("mysql", "root", "root", "basic_db");
-        
+
         if (!$conn) {
             echo '<div class="error">';
-            echo '<h4>❌ Connection Failed!</h4>';
+            echo '<h4>Connection Failed!</h4>';
             echo '<p>Error: ' . mysqli_connect_error() . '</p>';
             echo '</div>';
         } else {

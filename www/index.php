@@ -2,42 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, ini        <div class="info">
-            <h3>📝 Sample PHP Code</h3>
-            <div class="code">
-&lt;?php
-// Connect to database using MySQLi
-$conn = mysqli_connect("mysql", "root", "root", "basic_db");
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-// Simple query
-$result = mysqli_query($conn, "SELECT * FROM users");
-$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-foreach ($users as $user) {
-    echo $user['name'] . " - " . $user['email'] . "&lt;br&gt;";
-}
-
-// Close connection
-mysqli_close($conn);
-?&gt;
-            </div>
-        </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic PHP & MySQL Environment</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-</head>
-<body>
-    <div class="links">
-            <a href="/db-test.php" class="btn">🔍 Test Database</a>
-            <a href="/simple-crud.php" class="btn">📝 Simple CRUD</a>
-            <a href="/phpinfo.php" class="btn">📋 PHP Info</a>
-            <a href="/phpmyadmin" class="btn">🛠️ phpMyAdmin</a>
-    </div>
-    <title>Basic PHP & MySQL Environment</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
