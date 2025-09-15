@@ -8,7 +8,7 @@
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": false,
-      "upgradePackages": true,
+      "upgradePackages": false,
       "username": "application"
     }
   },
@@ -41,9 +41,6 @@
       "onAutoForward": "notify"
     }
   },
-
-  "postCreateCommand": "bash /app/scripts/setup.sh",
-  "postStartCommand": "bash /app/scripts/start-services.sh",
 
   "remoteUser": "application"
 }
