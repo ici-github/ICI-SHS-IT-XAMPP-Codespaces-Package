@@ -21,8 +21,14 @@ a2enconf phpmyadmin
 # Start Apache in background
 service apache2 start
 
-# Configure MariaDB with specified username, password, and database name
+# Initialize and start MariaDB
 service mysql start
+
+# Wait for MariaDB to be ready
+echo "Waiting for MariaDB to start..."
+sleep 5
+
+# Configure MariaDB with specified username, password, and database name
 mysql -e "CREATE DATABASE IF NOT EXISTS mariadb;"
 mysql -e "CREATE USER IF NOT EXISTS 'mariadb'@'localhost' IDENTIFIED BY 'mariadb';"
 mysql -e "GRANT ALL PRIVILEGES ON mariadb.* TO 'mariadb'@'localhost';"
@@ -35,5 +41,5 @@ echo "- phpMyAdmin: http://localhost/phpmyadmin"
 echo "- MariaDB: localhost:3306 (user: mariadb, pass: mariadb)"
 echo "- Document root: $DOC_ROOT"
 
-# Keep the script running to prevent the container from exiting
-tail -f /dev/null
+# Start Apache in foreground to keep container running
+exec apache2-foreground
