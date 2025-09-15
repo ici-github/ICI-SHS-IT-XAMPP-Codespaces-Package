@@ -3,62 +3,53 @@ version: '3.8'
 services:
   php-apache:
     build: .
-    container_name: xampp-php-apache
+    container_name: basic-php-apache
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./www:/var/www/html
-      - ./config/apache:/etc/apache2/sites-available
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
-      - ./scripts:/var/www/html/scripts
-    environment:
-      - APACHE_DOCUMENT_ROOT=/var/www/html
     depends_on:
       - mysql
     networks:
-      - xampp-network
+      - basic-network
     restart: unless-stopped
 
   mysql:
     image: mysql:8.0
-    container_name: xampp-mysql
+    container_name: basic-mysql
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test_db
-      MYSQL_USER: xampp
-      MYSQL_PASSWORD: xampp
+      MYSQL_DATABASE: basic_db
+      MYSQL_USER: student
+      MYSQL_PASSWORD: student
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./config/mysql/my.cnf:/etc/mysql/conf.d/custom.cnf
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
-      - xampp-network
+      - basic-network
     restart: unless-stopped
-    command: --default-authentication-plugin=mysql_native_password
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
-    container_name: xampp-phpmyadmin
+    container_name: basic-phpmyadmin
     ports:
       - "8080:80"
     environment:
       PMA_HOST: mysql
-      PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: root
-      UPLOAD_LIMIT: 64M
     depends_on:
       - mysql
     networks:
-      - xampp-network
+      - basic-network
     restart: unless-stopped
 
 volumes:
   mysql_data:
 
 networks:
-  xampp-network:
+  basic-network:
     driver: bridge
