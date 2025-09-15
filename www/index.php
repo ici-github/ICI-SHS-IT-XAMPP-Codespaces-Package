@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" con        <div class="links">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic PHP & MySQL Environment</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body>
+    <div class="links">
             <a href="/db-test.php" class="btn">🔍 Test Database</a>
             <a href="/simple-crud.php" class="btn">📝 Simple CRUD</a>
             <a href="/phpinfo.php" class="btn">📋 PHP Info</a>
             <a href="/phpmyadmin" class="btn">🛠️ phpMyAdmin</a>
-        </div>width=device-width, initial-scale=1.0">
+    </div>
     <title>Basic PHP & MySQL Environment</title>
     <style>
         body { 
