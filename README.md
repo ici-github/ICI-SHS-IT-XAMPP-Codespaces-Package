@@ -172,6 +172,9 @@ docker-compose exec mysql mysql -u root -p
 - Check the terminal for startup messages
 - Refresh your browser
 
+### Docker Build Issues?
+✅ **Fixed!** This environment now uses pre-built `webdevops/php-apache:8.1` image instead of building from scratch, which eliminates common compilation errors and speeds up deployment.
+
 ### Can't Connect to Database?
 - Ensure you're using `mysql` as the host (not `localhost`)
 - Wait for MySQL to fully start (can take 1-2 minutes)
